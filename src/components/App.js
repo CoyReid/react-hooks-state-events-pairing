@@ -1,18 +1,26 @@
-import video from "../data/video.js";
+import video from "../data/video";
+import React, { useState } from "react";
+import VideoInfo from "./VideoInfo"
+import CommentList from "./CommentList"
+import Video from "./Video.js";
 
 function App() {
-  console.log("Here's your data:", video);
+  const [commentsView, setCommentsView] = useState(true)
+  const [comments, setComments] = useState(video.comments)
+  
+  function handleDeleteComment(deletedCommentUser) {
+    setComments(comments.filter((comment) => comment.user !== deletedCommentUser))
+  }
+
+  function toggleComments() {
+    setCommentsView(!commentsView)
+  }
 
   return (
     <div className="App">
-      <iframe
-        width="919"
-        height="525"
-        src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-        frameborder="0"
-        allowfullscreen
-        title="Thinking in React"
-      />
+      <Video {...video}/>
+      <VideoInfo {...video} commentsView={commentsView} toggleComments={toggleComments}/>
+      <CommentList {...video} commentsView={commentsView} onDeleteComment={handleDeleteComment} allComments={comments}/>
     </div>
   );
 }
